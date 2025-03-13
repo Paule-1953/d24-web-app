@@ -81,3 +81,7 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+
+# Flux
+clusters/
+*.sops.yaml
