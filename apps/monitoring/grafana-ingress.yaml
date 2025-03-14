@@ -2,29 +2,26 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: grafana-ingress
-  namespace: monitoring
   annotations:
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
-    nginx.ingress.kubernetes.io/proxy-set-headers: |
-      Host: $host
-      X-Forwarded-Host: $host
-      X-Forwarded-Server: $host
-      X-Forwarded-For: $proxy_add_x_forwarded_for
-      X-Forwarded-Proto: $scheme
-      Upgrade: $http_upgrade
-      Connection: "upgrade"
+    nginx.ingress.kubernetes.io/auth-type: "jwt"
+    nginx.ingress.kubernetes.io/auth-secret: "grafana-auth"
+    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required"
+    nginx.ingress.kubernetes.io/websocket-services: "grafana"
 spec:
-  ingressClassName: nginx
   rules:
-  - http:
-      paths:
-      - path: /grafana(/|$)(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: prometheus-grafana
-            port:
-              number: 80
+  - host: publicIP
+    paths:
+    - path: /grafana
+      pathType: Prefix
+      backend:
+        service:
+          name: grafana
+          port:
+            number: 80
+    - path: /prometheus
+      pathType: Prefix
+      backend:
+        service:
+          name: prometheus-server
+          port:
+            number: 80
