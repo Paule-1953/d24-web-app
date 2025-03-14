@@ -9,13 +9,22 @@ data:
     domain = 34.159.86.5
     root_url = http://34.159.86.5/grafana
     serve_from_sub_path = true
-    [security]
-    allow_embedding = true
-    cookie_secure = false
-    cookie_samesite = lax
+
     [auth]
-    disable_login_form = false
-    disable_signout_menu = false
     login_cookie_name = grafana_session
+    signout_redirect_url = /grafana/login
+    login_maximum_inactive_lifetime_duration = 7d
+    login_maximum_lifetime_duration = 30d
+
     [paths]
     proxy_subpath = /grafana
+
+    [security]
+    cookie_secure = false
+    cookie_samesite = lax
+    allow_embedding = true
+    login_remember_days = 7
+    disable_initial_admin_creation = false
+
+    [auth.basic]
+    enabled = true
