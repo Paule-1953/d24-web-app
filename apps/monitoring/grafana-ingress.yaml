@@ -19,3 +19,10 @@ spec:
             name: prometheus-grafana
             port:
               number: 80
+      - path: /login(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: prometheus-grafana
+            port:
+              number: 80
