@@ -5,7 +5,7 @@ metadata:
   labels:
     app: web-app
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: web-app
@@ -45,10 +45,10 @@ metadata:
   name: web-app-service
 spec:
   selector:
-    app.kubernetes.io/name: web-app
+    app: web-app
   ports:
     - protocol: TCP
-      port: 8080
+      port: 80
       targetPort: 8080
 ---
 apiVersion: networking.k8s.io/v1
@@ -57,8 +57,9 @@ metadata:
   name: web-app-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
 spec:
-  ingressClassName: web-app-ingress-class
+  ingressClassName: nginx
   rules:
   - http:
       paths:
@@ -69,25 +70,24 @@ spec:
             name: web-app-service
             port:
               number: 80
-
-# ---
-# apiVersion: autoscaling/v2
-# kind: HorizontalPodAutoscaler
-# metadata:
-#   name: web-app
-#   labels:
-#     app.kubernetes.io/name: web-app
-# spec:
-#   scaleTargetRef:
-#     apiVersion: apps/v1
-#     kind: Deployment
-#     name: web-app-deployment
-#   minReplicas: 3
-#   maxReplicas: 10
-#   metrics:
-#   - type: Resource
-#     resource:
-#       name: cpu
-#       target:
-#         type: Utilization
-#         averageUtilization: 60
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web-app
+  labels:
+    app: web-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-app-deployment
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 60
