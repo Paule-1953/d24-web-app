@@ -8,7 +8,6 @@ spec:
     matchLabels:
       app: web-app
   endpoints:
-  - port: http
+  - port: 9100
     interval: 15s
     path: /metrics
-    targetPort: 9100
