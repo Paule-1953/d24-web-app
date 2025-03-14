@@ -1,0 +1,95 @@
+global:
+  rbac:
+    createAggregateClusterRoles: false
+
+kubeProxy:
+  enabled: false
+
+kubelet:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeControllerManager:
+  enabled: false
+
+kubeEtcd:
+  enabled: false
+
+prometheusOperator:
+  tls:
+    enabled: false
+  admissionWebhooks:
+    enabled: false
+    patch:
+      enabled: false
+  namespaces:
+    releaseNamespace: true
+    additional:
+      - monitoring
+      - default
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+prometheus:
+  prometheusSpec:
+    podMonitorNamespaceSelector: {}
+    serviceMonitorNamespaceSelector: {}
+    podMonitorSelector: {}
+    serviceMonitorSelector: {}
+    podMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    retention: 5d
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+alertmanager:
+  enabled: true
+  alertmanagerSpec:
+    storage: {}
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+grafana:
+  adminPassword: "bkuDCAYjlZsOgdi71Q80"
+  persistence:
+    enabled: true
+    type: pvc
+    size: 10Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+coreDns:
+  enabled: false
+
+nodeExporter:
+  enabled: false
+
+defaultRules:
+  create: true
+  rules:
+    kubeScheduler: false
+    kubeProxy: false
+    etcd: false
+    kubeControllerManager: false
