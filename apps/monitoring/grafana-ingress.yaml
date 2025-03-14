@@ -10,19 +10,19 @@ metadata:
     nginx.ingress.kubernetes.io/websocket-services: "grafana"
 spec:
   rules:
-  - host: publicIP
-    paths:
-    - path: /grafana
-      pathType: Prefix
-      backend:
-        service:
-          name: grafana
-          port:
-            number: 80
-    - path: /prometheus
-      pathType: Prefix
-      backend:
-        service:
-          name: prometheus-server
-          port:
-            number: 80
+  - http:
+      paths:
+      - path: /grafana
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana
+            port:
+              number: 80
+      - path: /prometheus
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-server
+            port:
+              number: 80
