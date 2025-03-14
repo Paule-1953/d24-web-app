@@ -4,7 +4,7 @@ metadata:
   name: monitoring-ingress
   namespace: monitoring
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     # Required for Grafana subpath
     nginx.ingress.kubernetes.io/use-regex: "true"
@@ -13,15 +13,15 @@ spec:
   rules:
   - http:
       paths:
-      - path: /grafana(/|$)(.*)
-        pathType: Prefix
+      - path: /grafana/?(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: prometheus-grafana
             port:
               number: 80
-      - path: /prometheus(/|$)(.*)
-        pathType: Prefix
+      - path: /prometheus/?(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: prometheus-operated
