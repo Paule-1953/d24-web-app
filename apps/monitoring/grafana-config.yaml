@@ -16,9 +16,6 @@ data:
     login_maximum_inactive_lifetime_duration = 7d
     login_maximum_lifetime_duration = 30d
 
-    [paths]
-    proxy_subpath = /grafana
-
     [security]
     cookie_secure = false
     cookie_samesite = lax
