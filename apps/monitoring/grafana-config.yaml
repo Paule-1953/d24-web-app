@@ -9,3 +9,9 @@ data:
     domain = 34.159.86.5
     root_url = %(protocol)s://%(domain)s/grafana
     serve_from_sub_path = true
+    [auth]
+    login_cookie_name = grafana_session
+    signout_redirect_url = /grafana/login
+    [security]
+    cookie_secure = false
+    cookie_samesite = lax
