@@ -22,6 +22,3 @@ data:
     allow_embedding = true
     login_remember_days = 7
     disable_initial_admin_creation = false
-
-    [auth.basic]
-    enabled = true
