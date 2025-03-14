@@ -75,7 +75,7 @@ spec:
           service:
             name: web-app-service
             port:
-              number: 80
+              number: 8080
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
