@@ -6,5 +6,6 @@ resources:
   - monitoring/web-app-prometheusrule.yaml
   - monitoring/web-app-servicemonitor.yaml
   - monitoring/grafana-config.yaml
-  - monitoring/monitoring-ingress.yaml
+  - monitoring/grafana-ingress.yaml
+  - monitoring/prometheus-ingress.yaml
   #- service.yaml
