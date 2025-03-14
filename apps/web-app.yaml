@@ -15,7 +15,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/path: "/metrics"
-        prometheus.io/port: "8080"
+        prometheus.io/port: "9100"
       labels:
         app: web-app
     spec:
@@ -43,6 +43,17 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
+      - name: node-exporter
+        image: prom/node-exporter:latest
+        ports:
+        - containerPort: 9100
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64M"
+          limits:
+            cpu: "100m"
+            memory: "128M"
 ---
 apiVersion: v1
 kind: Service
