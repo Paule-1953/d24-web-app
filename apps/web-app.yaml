@@ -58,11 +58,9 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: combined-ingress
+  name: web-app-ingress
   annotations:
-    #nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    #nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
@@ -75,20 +73,6 @@ spec:
             name: web-app-service
             port:
               number: 80
-      - path: /grafana
-        pathType: Prefix
-        backend:
-          service:
-            name: prometheus-grafana
-            port:
-              number: 80
-      - path: /prometheus
-        pathType: Prefix
-        backend:
-          service:
-            name: prometheus-kube-prometheus-prometheus
-            port:
-              number: 9090
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler

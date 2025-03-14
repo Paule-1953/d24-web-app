@@ -1,0 +1,18 @@
+app:
+  ingress:
+    enabled: false
+  metricsScraper:
+    enabled: true
+  service:
+    type: ClusterIP
+  protocolHttp: true
+  csrf: 
+    secretName: kubernetes-dashboard-csrf
+    # Random value base64 encoded
+    secret: "d2VyZndlcmZ3ZWZ3ZWY="
+
+metrics-server:
+  enabled: false
+
+nginx:
+  enabled: false
