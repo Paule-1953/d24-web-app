@@ -77,14 +77,14 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: kube-prometheus-stack-grafana
+            name: kube-prometheus-stack-grafana.monitoring.svc.cluster.local
             port:
               number: 80
       - path: /prometheus
         pathType: Prefix
         backend:
           service:
-            name: prometheus-operated
+            name: prometheus-operated.monitoring.svc.cluster.local
             port:
               number: 9090
 ---
