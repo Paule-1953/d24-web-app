@@ -39,18 +39,18 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
-      - name: prometheus-sidecar
-        image: prom/prometheus-client-golang:latest
-        volumeMounts:
-        - name: metrics-config
-          mountPath: /etc/prometheus
-        env:
-        - name: PROMETHEUS_URL
-          value: "http://http://34.159.86.5:80/metrics"
-  volumes:
-    - name: metrics-config
-      configMap:
-        name: prometheus-config
+  #     - name: prometheus-sidecar
+  #       image: prom/prometheus-client-golang:latest
+  #       volumeMounts:
+  #       - name: metrics-config
+  #         mountPath: /etc/prometheus
+  #       env:
+  #       - name: PROMETHEUS_URL
+  #         value: "http://http://34.159.86.5:80/metrics"
+  # volumes:
+  #   - name: metrics-config
+  #     configMap:
+  #       name: prometheus-config
 ---
 apiVersion: v1
 kind: Service
