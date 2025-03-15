@@ -42,13 +42,13 @@ spec:
       - name: prometheus-sidecar
         image: prom/prometheus-client-golang:latest
         volumeMounts:
-        - name: metrics-config
+        - name: web-app-configmap
           mountPath: /etc/prometheus
         env:
         - name: PROMETHEUS_URL
           value: "http://http://34.159.86.5:80/metrics"
   volumes:
-    - name: metrics-config
+    - name: web-app-configmap
       configMap:
         name: web-app-configmap
 ---
