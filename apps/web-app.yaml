@@ -12,10 +12,6 @@ spec:
       app: web-app
   template:
     metadata:
-      # annotations:
-      #   prometheus.io/scrape: "true"
-      #   prometheus.io/path: "/metrics"
-      #   prometheus.io/port: "9100"
       labels:
         app: web-app
     spec:
@@ -43,17 +39,18 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
-      - name: node-exporter
-        image: prom/node-exporter:latest
-        ports:
-        - containerPort: 9100
-        resources:
-          requests:
-            cpu: "50m"
-            memory: "64M"
-          limits:
-            cpu: "100m"
-            memory: "128M"
+      - name: prometheus-sidecar
+        image: prom/prometheus-client-golang:latest
+        volumeMounts:
+        - name: metrics-config
+          mountPath: /etc/prometheus
+        env:
+        - name: PROMETHEUS_URL
+          value: "http://http://34.159.86.5:80/metrics"
+  volumes:
+    - name: metrics-config
+      configMap:
+        name: prometheus-config
 ---
 apiVersion: v1
 kind: Service
@@ -70,18 +67,6 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
-    - name: metrics
-      protocol: TCP
-      port: 9100
-      targetPort: 9100
-    #- name: web-app 
-    # - protocol: TCP
-    #   port: 8080
-    #   targetPort: 8080
-    # - name: node-exporter
-    #   protocol: TCP
-    #   port: 9100
-    #   targetPort: 9100
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
