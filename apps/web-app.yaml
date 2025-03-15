@@ -87,8 +87,8 @@ spec:
   rules:
   - http:
       paths:
-      - path: /web-app
-        pathType: Exact
+      - path: /
+        pathType: Prefix
         backend:
           service:
             name: web-app-service
