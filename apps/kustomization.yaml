@@ -9,5 +9,4 @@ resources:
   - monitoring/grafana-config.yaml
   - monitoring/grafana-ingress.yaml
   - monitoring/prometheus-ingress.yaml
-  - monitoring/prometheus-prometheus.yaml
   #- service.yaml
