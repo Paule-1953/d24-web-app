@@ -10,8 +10,11 @@ spec:
   selector:
     matchLabels:
       app: web-app
+  namespaceSelector:
+    matchNames:
+      - default
   endpoints:
   - port: TCP
     interval: 15s
     path: /metrics
-    targetPort: 9100
+    targetPort: 8080
