@@ -9,4 +9,6 @@ resources:
   - monitoring/grafana-config.yaml
   - monitoring/grafana-ingress.yaml
   - monitoring/prometheus-ingress.yaml
+  - monitoring/prometheus-clusterrole.yaml
+  - monitoring/prometheus-clusterrolebinding.yaml
   #- service.yaml
