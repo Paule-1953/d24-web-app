@@ -4,7 +4,7 @@ metadata:
   name: prometheus-kube-prometheus-operator
 rules:
 - apiGroups: [""]
-  resources: ["services", "endpoints", "namespaces"]
+  resources: ["services", "endpoints", "namespaces", "configmaps"]
   verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 - apiGroups: ["apps"]
   resources: ["statefulsets"]
