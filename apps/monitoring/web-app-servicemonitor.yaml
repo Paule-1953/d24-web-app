@@ -3,6 +3,9 @@ kind: ServiceMonitor
 metadata:
   name: web-app-servicemonitor
   namespace: monitoring
+  labels:
+    app: web-app
+    release: prometheus-operator
 spec:
   selector:
     matchLabels:
