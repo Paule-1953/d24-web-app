@@ -50,7 +50,7 @@ spec:
   volumes:
     - name: metrics-config
       configMap:
-        name: prometheus-config
+        name: web-app-configmap
 ---
 apiVersion: v1
 kind: Service
