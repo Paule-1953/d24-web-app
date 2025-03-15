@@ -39,6 +39,19 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5
+      - name: prometheus-exporter
+        image: prom/statsd-exporter:latest
+        ports:
+        - containerPort: 9102
+        args:
+        - --statsd.mapping-config=/etc/statsd/mapping.conf
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/statsd
+      volumes:
+      - name: config-volume
+        configMap:
+          name: statsd-mapping-config
 ---
 apiVersion: v1
 kind: Service

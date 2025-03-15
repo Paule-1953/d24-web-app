@@ -1,23 +1,19 @@
 # apiVersion: monitoring.coreos.com/v1
-# kind: ServiceMonitor
-# metadata:
-#   name: web-app-servicemonitor
-#   namespace: monitoring
-#   labels:
-#     app: web-app
-#     release: prometheus
-# spec:
-#   selector:
-#     matchLabels:
-#       app: web-app
-#   namespaceSelector:
-#     matchNames:
-#       - default
-#   endpoints:
-#   - port: "9100"
-#     interval: 15s
-#     path: /metrics
-#   # - port: TCP
-#   #   interval: 15s
-#   #   path: /metrics
-#   #   targetPort: 8080
+kind: ServiceMonitor
+metadata:
+  name: web-app-servicemonitor
+  namespace: monitoring
+  labels:
+    app: web-app
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: web-app
+  namespaceSelector:
+    matchNames:
+      - default
+  endpoints:
+  - port: 9102
+    interval: 15s
+    path: /metrics
