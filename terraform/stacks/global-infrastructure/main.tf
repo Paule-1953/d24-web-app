@@ -53,8 +53,8 @@ resource "google_container_cluster" "this" {
 
   ip_allocation_policy {
     stack_type = "IPV4_IPV6"
-    services_secondary_range_name = google_compute_subnetwork.this.secondary_ip_range[2].range_name
-    cluster_secondary_range_name  = google_compute_subnetwork.this.secondary_ip_range[3].range_name
+    services_secondary_range_name = google_compute_subnetwork.this.secondary_ip_range[0].range_name
+    cluster_secondary_range_name  = google_compute_subnetwork.this.secondary_ip_range[1].range_name
     #services_secondary_range_name = "new-services-range"
     #cluster_secondary_range_name  = "new-pod-ranges"
   }
