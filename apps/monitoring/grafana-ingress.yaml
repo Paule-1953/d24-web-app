@@ -17,3 +17,10 @@ spec:
             name: prometheus-grafana
             port:
               number: 80
+      - path: /prometheus
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-operated
+            port:
+              number: 9090
