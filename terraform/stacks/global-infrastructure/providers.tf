@@ -10,5 +10,5 @@ terraform {
 
 provider "google" {
   project = "recruiting-sebastian-b"
-  region = "europe-west3"
+  region  = "europe-west3"
 }
