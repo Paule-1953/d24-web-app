@@ -1,0 +1,39 @@
+# app:
+#   name: web-app
+#   image: pschnurbus24/web-app:0.4
+#   replicas: 1
+#   resources:
+#     requests:
+#       cpu: "200m"
+#       memory: "256Mi"
+#     limits:
+#       cpu: "400m"
+#       memory: "512Mi"
+# prometheusExporter:
+#   image: prom/statsd-exporter:latest
+#   resources:
+#     requests:
+#       cpu: "100m"
+#       memory: "128Mi"
+#     limits:
+#       cpu: "200m"
+#       memory: "256Mi"
+# service:
+#   type: ClusterIP
+#   ports:
+#     http:
+#       port: 8080
+#       targetPort: 8080
+#     metrics:
+#       port: 9102
+#       targetPort: 9102
+# hpa:
+#   minReplicas: 1
+#   maxReplicas: 10
+#   cpuUtilization: 50
+# configMap:
+#   mapping:
+#     http_requests_total:
+#       name: "http_requests_total"
+#       labels:
+#         app: "web-app"
