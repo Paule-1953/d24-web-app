@@ -17,3 +17,5 @@ spec:
   - port: "metrics"
     interval: 15s
     path: /metrics
+    honorLabels: true
+    scrapeTimeout: 10s
