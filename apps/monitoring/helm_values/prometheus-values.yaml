@@ -68,6 +68,10 @@ alertmanager:
 
 grafana:
   adminPassword: "bkuDCAYjlZsOgdi71Q80"
+  grafana.ini:
+    server:
+      serve_from_sub_path: true
+      root_url: "http://34.159.86.5/grafana/"
   persistence:
     enabled: true
     type: pvc
