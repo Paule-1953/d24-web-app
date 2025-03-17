@@ -23,4 +23,4 @@ spec:
           service:
             name: prometheus-kube-prometheus-prometheus
             port:
-              number: 8080
+              number: 9090
