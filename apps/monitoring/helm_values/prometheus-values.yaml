@@ -39,6 +39,8 @@ prometheusOperator:
 
 prometheus:
   prometheusSpec:
+    externalUrl: "http://34.159.86.5/prometheus/"
+    routePrefix: /prometheus
     podMonitorNamespaceSelector: {}
     serviceMonitorNamespaceSelector: {}
     podMonitorSelector: {}
