@@ -9,7 +9,7 @@ resources:
   - monitoring/prometheus-clusterrolebinding.yaml
   - monitoring/prometheus-prometheus.yaml
   - monitoring/web-app-dashboard.yaml
-  - monitoring/web-app-prometheusrule.yaml
+  #- monitoring/web-app-prometheusrule.yaml
   - monitoring/web-app-servicemonitor.yaml
   - web-app/default-ingress.yaml
   - web-app/statsd-mapping-config.yaml

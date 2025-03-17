@@ -1,11 +1,12 @@
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
+  name: kube-pod-not-ready
+  namespace: monitoring
   labels:
     app: kube-prometheus-stack
     app.kubernetes.io/instance: kube-prometheus-stack
-    release: kube-prometheus-stack
-  name: kube-pod-not-ready
+    release: kube-prometheus-stack  
 spec:
   groups:
   - name: my-pod-demo-rules
