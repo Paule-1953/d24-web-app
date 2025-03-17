@@ -71,6 +71,7 @@ alertmanager:
 grafana:
   env:
     GF_SERVER_SERVE_FROM_SUB_PATH: true
+    GF_SERVER_ROOT_URL: "http://34.159.86.5/grafana/"
   grafana.ini:
     server:
       domain: "34.159.86.5"
