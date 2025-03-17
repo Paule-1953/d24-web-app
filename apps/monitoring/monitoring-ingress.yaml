@@ -19,7 +19,7 @@ spec:
             port:
               number: 80
       - path: /prometheus(/|$)(.*)
-        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
             name: prometheus-kube-prometheus-prometheus
