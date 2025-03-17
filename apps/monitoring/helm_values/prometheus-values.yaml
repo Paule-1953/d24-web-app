@@ -72,6 +72,12 @@ grafana:
     server:
       serve_from_sub_path: true
       root_url: "http://34.159.86.5/grafana/"
+      domain: "34.159.86.5/grafana/"
+    auth:
+      login_cookie_name: grafana_session
+      signout_redirect_url: /grafana/
+      login_maximum_inactive_lifetime_duration: 7d
+      login_maximum_lifetime_duration: 30d
   persistence:
     enabled: true
     type: pvc

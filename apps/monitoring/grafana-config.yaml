@@ -1,24 +1,24 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: grafana-config
-  namespace: monitoring
-data:
-  grafana.ini: |
-    [server]
-    domain = 34.159.86.5/grafana/
-    root_url = http://34.159.86.5/grafana
-    serve_from_sub_path = true
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: grafana-config
+#   namespace: monitoring
+# data:
+#   grafana.ini: |
+#     [server]
+#     domain = 34.159.86.5/grafana/
+#     root_url = http://34.159.86.5/grafana
+#     serve_from_sub_path = true
 
-    [auth]
-    login_cookie_name = grafana_session
-    signout_redirect_url = /grafana/
-    login_maximum_inactive_lifetime_duration = 7d
-    login_maximum_lifetime_duration = 30d
+#     [auth]
+#     login_cookie_name = grafana_session
+#     signout_redirect_url = /grafana/
+#     login_maximum_inactive_lifetime_duration = 7d
+#     login_maximum_lifetime_duration = 30d
 
-    [security]
-    cookie_secure = false
-    cookie_samesite = lax
-    allow_embedding = true
-    login_remember_days = 7
-    disable_initial_admin_creation = false
+#     [security]
+#     cookie_secure = false
+#     cookie_samesite = lax
+#     allow_embedding = true
+#     login_remember_days = 7
+#     disable_initial_admin_creation = false
