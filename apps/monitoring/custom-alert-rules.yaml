@@ -6,7 +6,7 @@ metadata:
   labels:
     app: kube-prometheus-stack
     app.kubernetes.io/instance: kube-prometheus-stack
-    release: kube-prometheus-stack  
+    release: prometheus 
 spec:
   groups:
   - name: my_pod_demo_rules
