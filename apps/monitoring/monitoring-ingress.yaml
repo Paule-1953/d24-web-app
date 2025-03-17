@@ -19,10 +19,10 @@ spec:
             name: prometheus-grafana
             port:
               number: 80
-      # - path: /
-      #   pathType: Prefix
-      #   backend:
-      #     service:
-      #       name: prometheus-kube-prometheus-prometheus
-      #       port:
-      #         number: 9090
+      - path: /prometheus
+        pathType: Exact
+        backend:
+          service:
+            name: prometheus-kube-prometheus-prometheus
+            port:
+              number: 9090

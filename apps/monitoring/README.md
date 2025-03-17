@@ -198,7 +198,8 @@ rate(container_network_receive_bytes_total[5m])
 rate(container_network_transmit_bytes_total[5m])
 ```
 
-Pod-Level Health Metrics```promql
+Pod-Level Health Metrics
+```promql
 # Pod status summary
 kube_pod_status_ready
 kube_pod_status_running
