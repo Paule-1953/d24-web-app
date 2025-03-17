@@ -40,9 +40,16 @@ prometheusOperator:
 prometheus:
   prometheusSpec:
     podMonitorNamespaceSelector: {}
-    serviceMonitorNamespaceSelector: {}
+    serviceMonitorNamespaceSelector: {
+      matchNames: ["default", "monitoring"]
+    }
     podMonitorSelector: {}
-    serviceMonitorSelector: {}
+    serviceMonitorSelector: {
+      matchLabels: {
+        app: web-app,
+        release: prometheus
+      }
+    }
     podMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelectorNilUsesHelmValues: false
     retention: 5d
