@@ -7,7 +7,7 @@ spec:
   containers:
   - name: load-generator
     image: busybox:1.28
-    command: ["/bin/sh", "-c", "while sleep 0.01; do wget -q -O- http://34.159.86.5/; done"]
+    command: ["/bin/sh", "-c", "while sleep 0.01; do wget -q -O- http://34.159.86.5/webapp; done"]
     resources:
       requests:
         cpu: "100m"
