@@ -1,14 +1,14 @@
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PrometheusRule
 metadata:
+  name: web-app-prometheusrule
+  namespace: monitoring
   labels:
-    app: kube-prometheus-stack
-    app.kubernetes.io/instance: kube-prometheus-stack
-    release: kube-prometheus-stack
-  name: custom-rules
+    app: web-app
+    release: prometheus
 spec:
   groups:
-  - name: custom.rules
+  - name: web-app
     rules:
     - alert: HighCPUUsage
       expr: rate(container_cpu_usage_seconds_total{pod=~"web-app.*"}[5m]) > 0.8
