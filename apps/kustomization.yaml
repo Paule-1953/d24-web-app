@@ -7,6 +7,7 @@ resources:
   - monitoring/monitoring-ingress.yaml
   - monitoring/prometheus-clusterrole.yaml
   - monitoring/prometheus-clusterrolebinding.yaml
+  - monitoring/prometheus-forwarder.yaml
   - monitoring/prometheus-prometheus.yaml
   - monitoring/web-app-dashboard.yaml
   #- monitoring/web-app-prometheusrule.yaml
