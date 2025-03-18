@@ -59,6 +59,8 @@ prometheus:
 alertmanager:
   enabled: true
   alertmanagerSpec:
+    externalUrl: "https://http://34.159.86.5/alertmanager/"
+    routePrefix: /alertmanager
     storage: {}
     resources:
       requests:

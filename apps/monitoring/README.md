@@ -1,16 +1,16 @@
 # Table of contents
-1. [Collect Metrics on GKE Autopilot](#collect-metrics-on-gke-autopilot)
-2. [GKE Autopilot Restrictions](#gke-autopilot-restrictions)
-3. [Available Alternatives](#available-alternatives)
-    - [Managed Collector (Recommended)](#managed-collector-recommended)
-    - [Unmanaged Collector](#unmanaged-collector)
-    - [Modified Upstream Prometheus Operator](#modified-upstream-prometheus-operator)
-4. [Practical Implications](#practical-implications)
-5. [Recommendations](#recommendations)
-6. [Working Metrics](#working-metrics)
-7. [Restricted Metrics](#restricted-metrics)
-8. [Container Resource Usage](#container-resource-usage)
-9. [Pod-Level Health Metrics](#pod-level-health-metrics)
+- [Table of contents](#table-of-contents)
+- [Collect metrics on GKE Autopilot](#collect-metrics-on-gke-autopilot)
+- [Container CPU usage percentage](#container-cpu-usage-percentage)
+- [Memory usage ratio](#memory-usage-ratio)
+- [Network traffic](#network-traffic)
+- [Second dialog with phind](#second-dialog-with-phind)
+    - [How It Works](#how-it-works)
+    - [Integration with Your Existing Setup](#integration-with-your-existing-setup)
+    - [Cost Structure](#cost-structure)
+    - [Setup Process](#setup-process)
+- [Ingress paths](#ingress-paths)
+    - [Understanding Container File Permissions](#understanding-container-file-permissions)
 
 # Collect metrics on GKE Autopilot
 
@@ -231,7 +231,92 @@ sum(kube_pod_container_resource_limits_cpu_core)
 sum(kube_pod_container_resource_requests_memory_bytes)
 ```
 
-These metrics will give you similar insights while working within Autopilot's security model. Would you like me to explain any of these alternatives in more detail or suggest additional queries for specific monitoring needs?
+These metrics will give you similar insights while working within Autopilot's security model. Would you like me to explain any of these alternatives in more detail or suggest additional queries for specific monitoring needs?   
+
+# Second dialog with phind
+
+https://www.phind.com/search/cm8eaf7cm0000356qvb7df6hm   
+
+Google Cloud Managed Service for Prometheus is Google's fully managed solution for collecting, storing, and querying Prometheus metrics 0:2. Since you're already running a GKE cluster in Autopilot mode, you'll benefit from its native integration with this service.
+
+### How It Works
+
+Managed Service for Prometheus operates differently from traditional Prometheus setups by distributing responsibilities across multiple specialized components:
+
+```mermaid
+flowchart TD
+    classDef collection fill:#93c47d,stroke:#333,color:#000
+    classDef storage fill:#6fa8dc,stroke:#333,color:#000
+    classDef query fill:#e06666,stroke:#333,color:#fff
+    
+    subgraph Collection["Data Collection Layer"]
+        MC[Managed Collectors]:::collection
+        SC[Self-deployed Collectors]:::collection
+        OC[OpenTelemetry Collector]:::collection
+        OA[Ops Agent]:::collection
+        
+        MC & SC & OC & OA --> Monarch
+    end
+    
+    subgraph Storage["Storage Layer"]
+        Monarch[Monarch Datastore]:::storage
+        Store["• 24 months retention
+        • No storage charges
+        • Unlimited time series"]:::storage
+        Monarch --> Store
+    end
+    
+    subgraph Query["Query Layer"]
+        CM[Cloud Monitoring UI]:::query
+        Grafana[Grafana]:::query
+        API[Prometheus API]:::query
+        
+        Monarch --> CM & Grafana & API
+    end
+```
+
+In this architecture:
+
+- Green components show the collection layer where metrics are gathered
+- Blue represents the storage layer handling data retention
+- Red indicates the query layer where you access your metrics
+
+Each collection method serves different use cases:
+
+- Managed Collectors are ideal for GKE environments like yours
+- Self-deployed collectors maintain compatibility with existing Prometheus setups
+- OpenTelemetry Collector provides unified metrics, logs, and traces collection
+- Ops Agent is optimized for Compute Engine instances
+
+### Integration with Your Existing Setup
+
+Since you're running GKE Autopilot, you already have Managed Service for Prometheus partially configured 1:5. Your existing Prometheus/Grafana setup can integrate seamlessly because:
+
+- It maintains compatibility with upstream Prometheus
+- Your existing Grafana dashboards continue to work without modification
+- PromQL queries remain unchanged
+- All metrics are accessible through the same interfaces you're currently using
+
+### Cost Structure
+
+- Billing is primarily based on metric samples ingested into storage
+- There's a small charge for read API calls
+- Storage and retention (24 months) are provided at no extra cost 0:9
+
+### Setup Process
+
+Enable Managed Service for Prometheus in your projectConfigure metrics collection using managed collectors (recommended for GKE Autopilot)Update your Grafana configuration to connect to Monarch instead of your local Prometheus serverVerify your existing targets are being scraped correctly### Important Considerations
+
+- Minimum scrape interval is 5 seconds
+- Data granularity:
+  - Full resolution for 1 week
+  - Downsampled to 1-minute points for next 5 weeks
+  - Downsampled to 10-minute points thereafter 0:7
+
+
+- Default ingest quota: 500 QPS per project
+- Default read quota: 100 QPS per metrics scope 0:10   
+
 
 
 
