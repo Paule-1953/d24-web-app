@@ -78,7 +78,7 @@ grafana:
     server:
       domain: "34.159.86.5"
       root_url: "http://34.159.86.5/grafana/"
-  adminPassword: "totally_secret"
+  adminPassword: "bkuDCAYjlZsOgdi71Q80"
   persistence:
     enabled: true
     type: pvc
