@@ -3,13 +3,11 @@ kind: Kustomization
 resources:
   - load-generator.yaml
   - monitoring/custom-alert-rules.yaml
-  - monitoring/grafana-config.yaml
   - monitoring/monitoring-ingress.yaml
   - monitoring/prometheus-clusterrole.yaml
   - monitoring/prometheus-clusterrolebinding.yaml
   - monitoring/prometheus-prometheus.yaml
   - monitoring/web-app-dashboard.yaml
-  #- monitoring/web-app-prometheusrule.yaml
   - monitoring/web-app-servicemonitor.yaml
   - web-app/default-ingress.yaml
   - web-app/statsd-mapping-config.yaml

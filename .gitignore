@@ -66,6 +66,9 @@ Thumbs.db
 .settings/
 *.sublime-workspace
 phind.md
+monitoring/README.md
+managed-collector-key.json
+recruiting-sebastian-b-b1d3f834ca71.json
 
 # Terraform
 *.tfstate
