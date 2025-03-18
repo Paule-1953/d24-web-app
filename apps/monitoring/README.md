@@ -1,3 +1,19 @@
+# Table of contents
+1. [Collect Metrics on GKE Autopilot](#collect-metrics-on-gke-autopilot)
+2. [GKE Autopilot Restrictions](#gke-autopilot-restrictions)
+3. [Available Alternatives](#available-alternatives)
+    - [Managed Collector (Recommended)](#managed-collector-recommended)
+    - [Unmanaged Collector](#unmanaged-collector)
+    - [Modified Upstream Prometheus Operator](#modified-upstream-prometheus-operator)
+4. [Practical Implications](#practical-implications)
+5. [Recommendations](#recommendations)
+6. [Working Metrics](#working-metrics)
+7. [Restricted Metrics](#restricted-metrics)
+8. [Container Resource Usage](#container-resource-usage)
+9. [Pod-Level Health Metrics](#pod-level-health-metrics)
+
+# Collect metrics on GKE Autopilot
+
 The DaemonSet isn't visible because GKE Autopilot restricts certain Kubernetes resources and configurations that require elevated privileges 0:3. When you installed kube-prometheus-stack, the node-exporter DaemonSet failed to deploy due to Autopilot's security controls.
 
 Here's what's happening in your cluster:
@@ -213,3 +229,150 @@ sum(kube_pod_container_resource_requests_memory_bytes)
 ```
 
 These metrics will give you similar insights while working within Autopilot's security model. Would you like me to explain any of these alternatives in more detail or suggest additional queries for specific monitoring needs?
+
+
+
+
+
+# Ingress paths
+
+https://stackoverflow.com/questions/56010759/unable-to-get-a-grafana-helm-charts-url-to-work-with-subpath   
+https://medium.com/@tinhtq97/configuring-access-to-prometheus-and-grafana-via-sub-paths-89c578577e8d   
+https://fabianlee.org/2022/07/02/prometheus-exposing-prometheus-grafana-as-ingress-for-kube-prometheus-stack/   
+
+
+
+- /grafana
+- /prometheus
+- /alertmanager
+
+The issue occurs because Grafana doesn't know it's being served from a sub-path, causing authentication redirects to fail. Here's how to fix it:
+
+First, create a `values.yaml` file with these configurations:```yaml
+grafana:
+  env:
+    GF_SERVER_SERVE_FROM_SUB_PATH: true
+  grafana.ini:
+    server:
+      root_url: "%(protocol)s://%(domain)s/grafana/"
+      serve_from_sub_path: true
+```
+
+Update your ingress configuration to include the rewrite annotation:```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - host: your-domain.com
+    http:
+      paths:
+      - path: /grafana(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: your-grafana-service
+            port:
+              number: 80
+```
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant I as Ingress Controller
+    participant G as Grafana
+    
+    Note over C,G: Without proper configuration
+    C->>I: GET /grafana/dashboard
+    I->>G: Forward to /
+    G-->>C: Redirect to /login
+    C->>I: GET /login
+    I--xC: Not found (wrong path)
+    
+    Note over C,G: With correct configuration
+    C->>I: GET /grafana/dashboard
+    Note right of I: Rewrite Target:<br/>/$2<br/>Removes /grafana prefix
+    I->>G: Forward to /
+    G-->>C: Redirect to /grafana/login
+    C->>I: GET /grafana/login
+    I->>G: Forward to /login
+    G-->>C: Login page
+```
+
+The diagram above illustrates why the configuration matters:
+
+- Without proper configuration (top half): When you visit `/grafana/dashboard`, Grafana tries to redirect to `/login` directly, which fails because the ingress expects all paths to start with `/grafana`
+- With our configuration (bottom half):
+  1. The ingress receives `/grafana/dashboard` and uses the rewrite target to forward to `/` internally
+  2. Grafana knows it's serving from a sub-path due to `GF_SERVER_SERVE_FROM_SUB_PATH: true`
+  3. When redirecting to login, Grafana correctly prefixes the path with `/grafana`
+  4. The ingress handles this correctly thanks to the rewrite annotation
+
+
+
+Apply these changes by updating your existing installation:
+
+```bash
+helm upgrade grafana prometheus-community/kube-prometheus-stack -f values.yaml
+```
+
+Important notes- Make sure your ingress controller supports path rewriting (most modern controllers do)
+- Clear your browser cache after applying these changes
+- If using HTTPS, ensure your certificates cover the correct domain
+- Test authentication flows thoroughly after deployment
+
+These changes will allow Grafana to properly handle authentication and routing while being served from the `/grafana` path.
+
+To modify the grafana.ini file directly in the pod, you'll need to understand the container's filesystem permissions and proper ways to edit configuration files. Let me explain the concepts first, then show you several approaches to solve this.
+
+### Understanding Container File Permissions
+
+Container filesystems typically have restricted permissions for security reasons. The grafana.ini file is owned by the grafana user (UID 472) and group (GID 472), with read-only permissions for the grafana user. When you try to edit it directly, you encounter permission denied errors because:
+
+- Your session runs as a different user
+- The file has restricted permissions
+- The container's filesystem is designed to be immutable
+
+Let's look at several approaches to handle this situation:
+
+Use Helm Values File (Recommended)```yaml
+grafana:
+  grafana.ini:
+    server:
+      root_url: "%(protocol)s://%(domain)s/grafana/"
+      serve_from_sub_path: true
+```
+
+- Proper Kubernetes way to manage configuration
+- Survives pod restarts and upgrades
+- Version controlled with rest of infrastructure
+- Automatically applied during deployment
+- Requires helm upgrade to take effect
+- Needs planning for configuration changes
+This approach uses Helm's built-in configuration management. Apply it with `helm upgrade -f values.yaml`. Changes persist across pod restarts and upgrades because they're part of your infrastructure configuration.Temporary Pod Modification```bash
+# 1. Check current permissions
+kubectl exec -it grafana-pod -- ls -l /etc/grafana/grafana.ini
+
+# 2. Edit with elevated privileges
+kubectl exec -it grafana-pod -- /bin/bash
+chown grafana:grafana /etc/grafana/grafana.ini
+chmod 644 /etc/grafana/grafana.ini
+nano /etc/grafana/grafana.ini
+
+# 3. Verify changes
+cat /etc/grafana/grafana.ini
+```
+
+- Quick for temporary debugging
+- Direct access to file system
+- Immediate feedback
+- Changes lost on pod restart
+- Not recommended for production
+- Violates container immutability principle
+This method temporarily modifies permissions to edit the file directly. While useful for debugging, changes won't persist across pod restarts. Use this only for testing configurations before moving them to your values.yaml file.### Best Practices
+
+Always prefer configuration management through Helm valuesDocument all configuration changes in version controlTest changes in development environment firstAvoid direct file modifications in production containersContainer filesystems are designed to be ephemeral. Any direct modifications to files inside containers should be considered temporary and used only for debugging purposes. For permanent changes, always use proper Kubernetes configuration management tools like Helm values files.
