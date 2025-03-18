@@ -200,6 +200,9 @@ flowchart LR
 
 This behavior occurs because GKE Autopilot implements specific security restrictions 0:3. While Kubernetes-level metrics (like pod status and readiness) are available, node-level metrics require hostPath volumes and elevated privileges that Autopilot restricts for security reasons.
 
+- Metrics like node_cpu_seconds_total and node_filesystem_size_bytes are unavailable because GKE Autopilot restricts access to node-level metrics.   
+- Metrics like kube_pod_* are working because they are Kubernetes-level metrics that are accessible in Autopilot.   
+
 Here are some working alternatives you can use instead:
 
 Container Resource Usage```promql
