@@ -41,6 +41,18 @@ prometheus:
   prometheusSpec:
     externalUrl: "http://34.159.86.5/prometheus/"
     routePrefix: /prometheus
+    additionalScrapeConfigs:
+      - job_name: 'kubernetes-pods-cadvisor'
+        scheme: https
+        metrics_path: /metrics/cadvisor
+        kubernetes_sd_configs:
+          - role: node
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        tls_config:
+          insecure_skip_verify: true
+        relabel_configs:
+          - action: labelmap
+            regex: __meta_kubernetes_node_label_(.+)
     podMonitorNamespaceSelector: {}
     serviceMonitorNamespaceSelector: {}
     podMonitorSelector: {}
