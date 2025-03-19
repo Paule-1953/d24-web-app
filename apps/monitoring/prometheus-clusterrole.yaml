@@ -42,3 +42,6 @@ rules:
 - apiGroups: ["networking.k8s.io"]
   resources: ["*"]
   verbs: ["*"]
+- apiGroups: [""]
+  resources: ["endpoints"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
