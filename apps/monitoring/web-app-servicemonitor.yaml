@@ -16,6 +16,6 @@ spec:
   endpoints:
   - port: "metrics"
     interval: 15s
-    path: /metrics
+    path: /metrics/cadvisor
     honorLabels: true
     scrapeTimeout: 10s

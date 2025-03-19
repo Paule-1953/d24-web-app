@@ -52,6 +52,7 @@ spec:
             memory: "256M"
         args:
         - --statsd.mapping-config=/etc/statsd/mapping.conf
+        - --web.telemetry-path=/metrics/cadvisor
         volumeMounts:
         - name: config-volume
           mountPath: /etc/statsd
