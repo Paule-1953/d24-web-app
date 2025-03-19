@@ -1,0 +1,14 @@
+sum(increase(container_cpu_cfs_throttled_periods_total
+{job="kubelet", metrics_path="/metrics/cadvisor", namespace="$namespace", pod="$pod", container!="", cluster="$cluster"}
+[$__rate_interval])) by (container) /sum(increase(container_cpu_cfs_periods_total
+{job="kubelet", metrics_path="/metrics/cadvisor", namespace="$namespace", pod="$pod", container!="", cluster="$cluster"}
+[$__rate_interval])) by (container)
+
+# Geht:
+sum(increase(container_cpu_cfs_throttled_periods_total{}[$__rate_interval])) by (container) /sum(increase(container_cpu_cfs_periods_total{}[$__rate_interval])) by (container)
+
+sum(increase(container_cpu_cfs_throttled_periods_total{job="kubelet", metrics_path="/metrics/cadvisor"}[$__rate_interval])) by (container) /sum(increase(container_cpu_cfs_periods_total{job="kubelet", metrics_path="/metrics/cadvisor"}[$__rate_interval])) by (container)
+
+ceil(sum by(container) (rate(container_fs_reads_total{job="kubelet", metrics_path="/metrics/cadvisor", container!="", cluster="$cluster", namespace="$namespace", pod="$pod"}[$__rate_interval]) + rate(container_fs_writes_total{job="kubelet", metrics_path="/metrics/cadvisor", container!="", cluster="$cluster", namespace="$namespace", pod="$pod"}[$__rate_interval])))
+
+ceil(sum by(container) (rate(container_fs_reads_total{job="kubelet", metrics_path="/metrics/cadvisor", container!="", cluster="$cluster", pod="$pod"}[$__rate_interval]) + rate(container_fs_writes_total{job="kubelet", metrics_path="/metrics/cadvisor", container!="", cluster="$cluster", pod="$pod"}[$__rate_interval])))
