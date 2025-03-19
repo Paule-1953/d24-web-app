@@ -1,21 +1,21 @@
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: web-app-servicemonitor
-  namespace: monitoring
-  labels:
-    app: web-app
-    release: prometheus
-spec:
-  selector:
-    matchLabels:
-      app: web-app
-  namespaceSelector:
-    matchNames:
-      - default
-  endpoints:
-  - port: "metrics"
-    interval: 15s
-    path: /metrics/cadvisor
-    honorLabels: true
-    scrapeTimeout: 10s
+# apiVersion: monitoring.coreos.com/v1
+# kind: ServiceMonitor
+# metadata:
+#   name: web-app-servicemonitor
+#   namespace: monitoring
+#   labels:
+#     app: web-app
+#     release: prometheus
+# spec:
+#   selector:
+#     matchLabels:
+#       app: web-app
+#   namespaceSelector:
+#     matchNames:
+#       - default
+#   endpoints:
+#   - port: "metrics"
+#     interval: 15s
+#     path: /metrics/cadvisor
+#     honorLabels: true
+#     scrapeTimeout: 10s
