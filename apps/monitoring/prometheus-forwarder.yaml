@@ -1,0 +1,15 @@
+apiVersion: monitoring.googleapis.com/v1alpha2
+kind: ManagedCollector
+metadata:
+  name: prometheus-forwarder
+  namespace: monitoring  # Your existing monitoring namespace
+spec:
+  scrapeConfigs:
+    - jobName: kubernetes-service-endpoints
+      honorLabels: true
+      metricsPath: /metrics
+      kubernetesSDConfigs:
+        - role: service
+      forwardTo:
+        prometheus:
+          endpoint: "http://prometheus-kube-prometheus-prometheus.monitoring.svc.cluster.local:9090/api/v1/write"  # Update with your service name
