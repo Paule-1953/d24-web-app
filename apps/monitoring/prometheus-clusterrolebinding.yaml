@@ -1,12 +1,15 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: prometheus-kube-prometheus-operator
+  name: full-access-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: prometheus-kube-prometheus-operator
+  name: full-access-role
 subjects:
 - kind: ServiceAccount
   name: prometheus-kube-prometheus-operator
+  namespace: monitoring
+- kind: ServiceAccount
+  name: prometheus-kube-prometheus-prometheus
   namespace: monitoring
