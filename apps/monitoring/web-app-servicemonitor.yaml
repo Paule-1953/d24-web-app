@@ -17,5 +17,5 @@ spec:
   - port: "metrics"
     interval: 15s
     scrapeTimeout: 10s
-    # path: /metrics/cadvisor
+    path: /metrics/cadvisor
     # honorLabels: true
